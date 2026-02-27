@@ -124,7 +124,7 @@
     generateBtn.textContent = "Loading...";
 
     try {
-      const res = await fetch("/api/" + encodeURIComponent(url));
+      const res = await fetch("/" + encodeURIComponent(url));
       const text = await res.text();
       if (!res.ok) {
         errorEl.textContent = text;

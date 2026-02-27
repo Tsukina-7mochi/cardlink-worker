@@ -7,10 +7,10 @@
   },
   "tasks": {
     "build": "deno -RWE --allow-run build.ts",
-    "cf-typegen": "wrangler types",
-    "deploy": "wrangler deploy",
+    "cf-typegen": "deno wrangler types",
+    "deploy": "deno wrangler deploy",
     "dev": "deno serve src/mod.ts",
-    "dev-wrangler": "wrangler dev"
+    "dev-wrangler": "deno wrangler dev"
   },
   "imports": {
     "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.1",

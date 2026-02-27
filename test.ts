@@ -41,13 +41,20 @@ function withMockFetch(
   };
 }
 
-Deno.test("returns 400 for empty path", async () => {
+Deno.test("returns 404 for non-api paths (static assets handled by CF)", async () => {
   const res = await worker.fetch(makeRequest(""));
+  assertEquals(res.status, 404);
+});
+
+Deno.test("returns 400 for empty api path", async () => {
+  const res = await worker.fetch(makeRequest("api/"));
   assertEquals(res.status, 400);
 });
 
 Deno.test("returns 400 for non-http URL", async () => {
-  const res = await worker.fetch(makeRequest("ftp%3A%2F%2Fexample.com"));
+  const res = await worker.fetch(
+    makeRequest("api/ftp%3A%2F%2Fexample.com"),
+  );
   assertEquals(res.status, 400);
   const text = await res.text();
   assertStringIncludes(text, "http");
@@ -57,7 +64,7 @@ Deno.test(
   "returns cardlink with all OGP fields",
   withMockFetch(SAMPLE_HTML, async () => {
     const target = encodeURIComponent("https://example.com");
-    const res = await worker.fetch(makeRequest(target));
+    const res = await worker.fetch(makeRequest(`api/${target}`));
 
     assertEquals(res.status, 200);
     assertEquals(res.headers.get("content-type"), "text/plain; charset=utf-8");
@@ -77,7 +84,7 @@ Deno.test(
   "returns cardlink with minimal fields",
   withMockFetch(MINIMAL_HTML, async () => {
     const target = encodeURIComponent("https://example.com/page");
-    const res = await worker.fetch(makeRequest(target));
+    const res = await worker.fetch(makeRequest(`api/${target}`));
 
     assertEquals(res.status, 200);
     const text = await res.text();
@@ -91,7 +98,7 @@ Deno.test("returns 502 when fetch fails", async () => {
   globalThis.fetch = () => Promise.reject(new Error("Connection refused"));
   try {
     const target = encodeURIComponent("https://unreachable.test");
-    const res = await worker.fetch(makeRequest(target));
+    const res = await worker.fetch(makeRequest(`api/${target}`));
     assertEquals(res.status, 502);
     const text = await res.text();
     assertStringIncludes(text, "Connection refused");

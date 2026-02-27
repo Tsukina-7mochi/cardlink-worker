@@ -26,15 +26,22 @@ function buildCardlink(url: string, html: string): string {
 
 export default {
   async fetch(request: Request): Promise<Response> {
-    const path = new URL(request.url).pathname.slice(1);
+    const { pathname } = new URL(request.url);
 
-    if (!path) {
-      return new Response("Usage: /{url-encoded-target-url}", { status: 400 });
+    if (!pathname.startsWith("/api/")) {
+      return new Response("Not found", { status: 404 });
+    }
+
+    const encoded = pathname.slice("/api/".length);
+    if (!encoded) {
+      return new Response("Usage: /api/{url-encoded-target-url}", {
+        status: 400,
+      });
     }
 
     let targetUrl: string;
     try {
-      targetUrl = decodeURIComponent(path);
+      targetUrl = decodeURIComponent(encoded);
     } catch {
       return new Response("Invalid URL encoding", { status: 400 });
     }

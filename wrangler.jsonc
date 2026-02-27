@@ -6,6 +6,10 @@
   "observability": {
     "enabled": true
   },
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "none"
+  },
   "build": {
     "command": "deno task build"
   }

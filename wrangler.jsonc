@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "cardlink-worker",
+  "main": "dist/server.js",
+  "compatibility_date": "2026-02-28",
+  "observability": {
+    "enabled": true
+  },
+  "build": {
+    "command": "deno task build"
+  }
+}

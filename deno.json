@@ -11,7 +11,7 @@
   "tasks": {
     "build": "deno -RWE --allow-run build.ts",
     "cf-typegen": "deno wrangler types",
-    "deploy": "deno wrangler deploy",
+    "deploy": "deno -A wrangler deploy",
     "dev": "deno serve src/mod.ts",
     "dev-wrangler": "deno wrangler dev"
   },

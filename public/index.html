@@ -1,160 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cardlink Generator</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f5f5f5;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    padding: 3rem 1rem;
-  }
-
-  .container {
-    width: 100%;
-    max-width: 640px;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .input-row {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  input[type="url"] {
-    flex: 1;
-    padding: 0.6rem 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.95rem;
-  }
-
-  button {
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    background: #2563eb;
-    color: #fff;
-    white-space: nowrap;
-  }
-
-  button:hover { background: #1d4ed8; }
-  button:disabled { background: #93c5fd; cursor: not-allowed; }
-
-  .result-area {
-    display: none;
-    position: relative;
-    margin-top: 0.5rem;
-  }
-
-  .result-area.visible { display: block; }
-
-  pre {
-    background: #1e1e1e;
-    color: #d4d4d4;
-    padding: 1rem;
-    border-radius: 6px;
-    overflow-x: auto;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-
-  .copy-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    padding: 0.3rem 0.7rem;
-    font-size: 0.8rem;
-    background: #4b5563;
-  }
-
-  .copy-btn:hover { background: #374151; }
-  .copy-btn.copied { background: #16a34a; }
-
-  .error {
-    color: #dc2626;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-  }
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>Cardlink Generator</h1>
-  <div class="input-row">
-    <input type="url" id="url" placeholder="https://example.com" />
-    <button id="generate">Generate</button>
-  </div>
-  <div id="error" class="error"></div>
-  <div id="result-area" class="result-area">
-    <button id="copy" class="copy-btn">Copy</button>
-    <pre id="result"></pre>
-  </div>
-</div>
-<script>
-  const urlInput = document.getElementById("url");
-  const generateBtn = document.getElementById("generate");
-  const resultArea = document.getElementById("result-area");
-  const resultPre = document.getElementById("result");
-  const copyBtn = document.getElementById("copy");
-  const errorEl = document.getElementById("error");
-
-  async function generate() {
-    const url = urlInput.value.trim();
-    if (!url) return;
-
-    errorEl.textContent = "";
-    resultArea.classList.remove("visible");
-    generateBtn.disabled = true;
-    generateBtn.textContent = "Loading...";
-
-    try {
-      const res = await fetch("/" + encodeURIComponent(url));
-      const text = await res.text();
-      if (!res.ok) {
-        errorEl.textContent = text;
-        return;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cardlink Generator</title>
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-      resultPre.textContent = text;
-      resultArea.classList.add("visible");
-    } catch (e) {
-      errorEl.textContent = "Request failed: " + e.message;
-    } finally {
-      generateBtn.disabled = false;
-      generateBtn.textContent = "Generate";
-    }
-  }
 
-  generateBtn.addEventListener("click", generate);
-  urlInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") generate();
-  });
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f5f5f5;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        padding: 3rem 1rem;
+      }
 
-  copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(resultPre.textContent).then(() => {
-      copyBtn.textContent = "Copied!";
-      copyBtn.classList.add("copied");
-      setTimeout(() => {
-        copyBtn.textContent = "Copy";
-        copyBtn.classList.remove("copied");
-      }, 1500);
-    });
-  });
-</script>
-</body>
+      .container {
+        width: 100%;
+        max-width: 640px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      input[type="url"] {
+        flex: 1;
+        padding: 0.6rem 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
+
+      button {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        background: #2563eb;
+        color: #fff;
+        white-space: nowrap;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+      button:disabled {
+        background: #93c5fd;
+        cursor: not-allowed;
+      }
+
+      .result-area {
+        display: none;
+        position: relative;
+        margin-top: 0.5rem;
+      }
+
+      .result-area.visible {
+        display: block;
+      }
+
+      pre {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      .copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.8rem;
+        background: #4b5563;
+      }
+
+      .copy-btn:hover {
+        background: #374151;
+      }
+      .copy-btn.copied {
+        background: #16a34a;
+      }
+
+      .error {
+        color: #dc2626;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cardlink Generator</h1>
+      <div class="input-row">
+        <input type="url" id="url" placeholder="https://example.com" />
+        <button id="generate">Generate</button>
+      </div>
+      <div id="error" class="error"></div>
+      <div id="result-area" class="result-area">
+        <button id="copy" class="copy-btn">Copy</button>
+        <pre id="result"></pre>
+      </div>
+    </div>
+    <script>
+      const urlInput = document.getElementById("url");
+      const generateBtn = document.getElementById("generate");
+      const resultArea = document.getElementById("result-area");
+      const resultPre = document.getElementById("result");
+      const copyBtn = document.getElementById("copy");
+      const errorEl = document.getElementById("error");
+
+      async function generate() {
+        const url = urlInput.value.trim();
+        if (!url) return;
+
+        errorEl.textContent = "";
+        resultArea.classList.remove("visible");
+        generateBtn.disabled = true;
+        generateBtn.textContent = "Loading...";
+
+        try {
+          const res = await fetch("/" + encodeURIComponent(url));
+          const text = await res.text();
+          if (!res.ok) {
+            errorEl.textContent = text;
+            return;
+          }
+          resultPre.textContent = text;
+          resultArea.classList.add("visible");
+        } catch (e) {
+          errorEl.textContent = "Request failed: " + e.message;
+        } finally {
+          generateBtn.disabled = false;
+          generateBtn.textContent = "Generate";
+        }
+      }
+
+      generateBtn.addEventListener("click", generate);
+      urlInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") generate();
+      });
+
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(resultPre.textContent).then(
+          () => {
+            copyBtn.textContent = "Copied!";
+            copyBtn.classList.add("copied");
+            setTimeout(() => {
+              copyBtn.textContent = "Copy";
+              copyBtn.classList.remove("copied");
+            }, 1500);
+          },
+        );
+      });
+    </script>
+  </body>
 </html>

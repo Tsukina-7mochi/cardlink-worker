@@ -12,5 +12,12 @@
   },
   "build": {
     "command": "deno task build"
-  }
+  },
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "cardlink.ts7m.net",
+      "custom_domain": true
+    }
+  ]
 }

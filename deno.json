@@ -5,6 +5,9 @@
       "deno.window"
     ]
   },
+  "exclude": [
+    "worker-configuration.d.ts"
+  ],
   "tasks": {
     "build": "deno -RWE --allow-run build.ts",
     "cf-typegen": "deno wrangler types",

@@ -47,9 +47,7 @@ export default {
 
     let html: string;
     try {
-      const res = await fetch(targetUrl, {
-        headers: { "User-Agent": "cardlink-worker/1.0" },
-      });
+      const res = await fetch(targetUrl);
       html = await res.text();
     } catch (error) {
       return new Response(
